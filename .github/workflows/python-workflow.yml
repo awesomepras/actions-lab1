@@ -1,0 +1,14 @@
+name: Sample python workflow
+on: push # trigger 
+jobs: # must have at least one job, associated to a runner
+  build: #name 
+    runs-on: ubuntu-latest #github hosted runner
+    steps:
+    - uses: actions/checkout@v4 # prebuilt actions to checkout repo
+    - name: Set up Python 3.8 #step 1
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies # step 2
+      run: |
+        pip install -r requirements.txt

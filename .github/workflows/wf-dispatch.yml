@@ -1,0 +1,26 @@
+name: Exploring Workflow Dispatch Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      run-job:
+        type: boolean
+        required: false
+        description: "Run specific job"
+      custom_message:
+        type: string
+        required: true
+        description: "Enter Custom message"
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Exploring Workflow Dispatch Trigger"
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Printing Custom message
+        run: echo ${{ inputs.custom_message }}
+      - name: Printing run-job boolean value
+        if: ${{ inputs.run-job == true }} 
+        run: echo ${{ inputs.run-job}}
