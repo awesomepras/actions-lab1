@@ -22,6 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - run: mkdir -p subdir
+    - run: echo '{}' > subdir/package-lock.json  # Ensure package-lock.json exists
     - uses: actions/setup-node@v3
       with:
 #        node-version-file: '.nvmrc'
