@@ -21,10 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Create subdir directory
-      uses: actions/create-directory@v2
-      with:
-        path: subdir
+    - run: mkdir -p subdir
     - uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
