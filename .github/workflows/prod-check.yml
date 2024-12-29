@@ -6,11 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
      - name: Check branch name
-       run: echo "Branch: ${{ github.ref }}"
+       run: "echo 'Branch: ${{ github.ref }}'"
      - run: ./.github/scripts/build.sh
      - name: Label when approved
        uses: pullreminders/label-when-approved-action@main
        env:
-         APPROVALS: "1"
+         APPROVALS: "2"
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          ADD_LABEL: "approved"
