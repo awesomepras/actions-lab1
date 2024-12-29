@@ -24,13 +24,13 @@ jobs:
     - run: mkdir -p subdir
     - uses: actions/setup-node@v3
       with:
-        node-version-file: '.nvmrc'
+#        node-version-file: '.nvmrc'
         cache: 'npm'
         cache-dependency-path: ./subdir/package-lock.json
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
-        node-version-file: '.nvmrc'
+#        node-version-file: '.nvmrc'
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: ./subdir/package-lock.json 
