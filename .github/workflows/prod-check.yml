@@ -1,0 +1,14 @@
+name: Sample production deployment wf 
+on: push 
+jobs:
+  prod-check: 
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu:24.04 
+    steps: 
+     - run: ./.github/scripts/build.sh
+     - name: Label when approved
+       uses: pullreminders/label-when-approved-action@main
+       env:
+         APPROVALS: "1"
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         ADD_LABEL: "approved"
