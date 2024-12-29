@@ -3,8 +3,10 @@ on: push
 jobs:
   prod-check: 
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps: 
+     - name: Check branch name
+       run: echo "Branch: ${{ github.ref }}"
      - run: ./.github/scripts/build.sh
      - name: Label when approved
        uses: pullreminders/label-when-approved-action@main
