@@ -7,9 +7,62 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+    types: [opened, reopened]
     branches: [ "main" ]
+permissions:
+  contents: read # Required for actions/checkout
+  pull-requests: write # Required for gh bot to comment on PR
 
 jobs:
+  trivy-checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trivy Setup
+        uses: aquasecurity/setup-trivy@v0.2.2
+        with:
+          cache: true
+          version: v0.58.1
+
+      - name: Run Trivy vulnerability scanner
+        id: trivy
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: 'fs' # filesystem scanner
+          scan-ref: '.' # whole repo
+          trivy-config: trivy.yaml # Use our config file
+          skip-setup-trivy: true # We used the separate setup step to enable caching
+        continue-on-error: true # By default, error would end the workflow
+
+      - name: Report to PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('./apps/alpha/trivy-report.txt', 'utf8');
+            const output = `Trivy report:
+            \`\`\`\n
+            ${report.length > 0 ? report : 'No issues found'}
+            \`\`\`
+
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+      - name: Trivy Status
+        if: steps.trivy.outcome == 'failure'
+        run: exit 1
+        shell: bash
+
+
   build:
 
     runs-on: ubuntu-latest
