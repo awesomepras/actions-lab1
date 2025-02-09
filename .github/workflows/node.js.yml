@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+#    branches: [ "main" ]
   pull_request:
-    types: [opened, reopened]
+#    types: [opened, reopened]
     branches: [ "main" ]
 permissions:
   contents: read # Required for actions/checkout
